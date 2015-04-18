@@ -1,0 +1,22 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/cl-week/cl-week.html">
+<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+
+<dom-module id="cl-weekview">
+	<template>
+		<cl-week class="cl-week prev-week col-xs-2" week="{{prevWeek}}"></cl-week>
+		<cl-week class="cl-week current-week col-xs-6" week="{{currentWeek}}"></cl-week>
+		<cl-week class="cl-week next-week col-xs-2" week="{{nextWeek}}"></cl-week>
+	</template>
+</dom-module>
+
+<script>
+	Polymer({
+		is: 'cl-weekview',
+		properties: {
+			prevWeek: Object,
+			currentWeek: Object,
+			nextWeek: Object
+		}
+	});
+</script>

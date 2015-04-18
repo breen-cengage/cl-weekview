@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+		<link rel="import" href="/bower_components/polymer/polymer.html">
+		<link rel="import" href="cl-weekview.html">
+		<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="standalone.css">
+	</head>
+
+	<body class="row">
+		<cl-dashboard></cl-dashboard>
+
+		<dom-module id="cl-dashboard">
+			<template>
+				<cl-weekview
+					prev-week="{{prevWeek}}"
+					current-week="{{currentWeek}}"
+					next-week="{{nextWeek}}">
+				</cl-weekview>
+			</template>
+		</dom-module>
+
+		<script>
+			Polymer({
+				is: 'cl-dashboard',
+				properties: {
+					prevWeek: {
+						type: Object,
+						value: {
+							number: 4,
+							startDate: 'Apr 10',
+							endDate: 'Apr 16'
+						}
+					},
+					currentWeek: {
+						type: Object,
+						value: {
+							number: 5,
+							startDate: 'Apr 17',
+							endDate: 'Apr 23'
+						}
+					},
+					nextWeek: {
+						type: Object,
+						value: {
+							number: 6,
+							startDate: 'Apr 24',
+							endDate: 'Apr 30'
+						}
+					},
+				}
+			});
+		</script>
+	</body>
+</html>
