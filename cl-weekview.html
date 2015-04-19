@@ -1,4 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/core-signals/core-signals.html">
+<link rel="import" href="/bower_components/cl-week-slider/cl-week-slider.html">
 <link rel="import" href="/bower_components/cl-week/cl-week.html">
 
 <polymer-element name="cl-weekview">
@@ -6,6 +8,16 @@
 	<template>
 		<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
 		<link rel="stylesheet" href="cl-weekview.css">
+
+		<core-signals></core-signals>
+
+		<div class="row">
+			<cl-week-slider
+				numWeeks="{{numWeeks}}"
+				selectedWeek="{{selectedWeek}}"
+				progressWeek="{{progressWeek}}">
+			</cl-week-slider>
+		</div>
 
 		<cl-week class="prev-week col-xs-2" week='{{prevWeek}}'></cl-week>
 		<cl-week class="current-week col-xs-6" week='{{currentWeek}}'></cl-week>
@@ -15,6 +27,9 @@
 	<script>
 		Polymer({
 			publish: {
+				numWeeks: 0,
+				selectedWeek: 0,
+				progressWeek: 0,
 				prevWeek: {},
 				currentWeek: {},
 				nextWeek: {}
@@ -23,6 +38,18 @@
 				this.prevWeek = {};
 				this.currentWeek = {};
 				this.nextWeek = {};
+			},
+			ready: function () {
+				var coreSignals = this.querySelector('::shadow core-signals');
+				var weekSelectedEvent = 'core-signal-cl-week-slider:week-selected';
+				coreSignals.addEventListener(weekSelectedEvent, weekSelected.bind(this));
+
+				function weekSelected(e) {
+					var selectedWeek = e.detail.selectedWeek;
+					this.prevWeek.number = selectedWeek - 1;
+					this.currentWeek.number = selectedWeek;
+					this.nextWeek.number = selectedWeek + 1;
+				}
 			}
 		});
 	</script>

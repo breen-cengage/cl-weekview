@@ -17,6 +17,8 @@
   "dependencies": {
     "bootstrap": "~3.3.4",
     "polymer": "Polymer/polymer#^0.5",
-    "cl-week": "git@github.com:breen-cengage/cl-week.git"
+    "cl-week": "git@github.com:breen-cengage/cl-week.git",
+    "cl-week-slider": "git@github.com:breen-cengage/cl-week-slider.git",
+    "core-signals": "Polymer/core-signals#^0.5"
   }
 }
