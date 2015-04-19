@@ -1,0 +1,14 @@
+cl-week {
+  height: 100%; }
+  cl-week.current-week {
+    margin: 0px 16px;
+    background: white; }
+  cl-week.prev-week, cl-week.next-week {
+    background: #455A64;
+    opacity: 0.9; }
+    cl-week.prev-week::shadow cl-week-heading::shadow .week-dates, cl-week.next-week::shadow cl-week-heading::shadow .week-dates {
+      display: none; }
+  cl-week.prev-week::shadow cl-week-heading::shadow .week-number {
+    float: right; }
+
+/*# sourceMappingURL=cl-weekview.css.map */

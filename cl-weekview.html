@@ -1,0 +1,30 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/cl-week/cl-week.html">
+
+<polymer-element name="cl-weekview">
+
+	<template>
+		<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+		<link rel="stylesheet" href="cl-weekview.css">
+
+		<cl-week class="prev-week col-xs-2" week='{{prevWeek}}'></cl-week>
+		<cl-week class="current-week col-xs-6" week='{{currentWeek}}'></cl-week>
+		<cl-week class="next-week col-xs-2" week='{{nextWeek}}'></cl-week>
+	</template>
+
+	<script>
+		Polymer({
+			publish: {
+				prevWeek: {},
+				currentWeek: {},
+				nextWeek: {}
+			},
+			created: function () {
+				this.prevWeek = {};
+				this.currentWeek = {};
+				this.nextWeek = {};
+			}
+		});
+	</script>
+
+</polyer-element>
