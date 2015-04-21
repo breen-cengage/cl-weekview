@@ -1,6 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/core-signals/core-signals.html">
-<link rel="import" href="/bower_components/cl-week-slider/cl-week-slider.html">
+<!-- <link rel="import" href="/bower_components/cl-week-slider/cl-week-slider.html"> -->
 <link rel="import" href="/bower_components/cl-week/cl-week.html">
 
 <polymer-element name="cl-weekview">
@@ -8,17 +8,26 @@
 	<template>
 		<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
 		<link rel="stylesheet" href="cl-weekview.css">
+		<style>
+			button {
+				margin-left: 600px;
+			}
+		</style>
 
 		<core-signals></core-signals>
 
-		<div class="row">
+		<div class="row" hidden?="{{weekSliderLoaded}}">
+			<button on-click="{{importSlider}}">Slider</button>
+		</div>
+
+<!-- 		<div class="row">
 			<cl-week-slider
 				numWeeks="{{numWeeks}}"
 				selectedWeek="{{selectedWeek}}"
 				progressWeek="{{progressWeek}}">
 			</cl-week-slider>
-		</div>
-
+		</div> -->
+		
 		<cl-week class="prev-week col-xs-2" week='{{prevWeek}}'></cl-week>
 		<cl-week class="current-week col-xs-6" week='{{currentWeek}}'></cl-week>
 		<cl-week class="next-week col-xs-2" week='{{nextWeek}}'></cl-week>
@@ -34,6 +43,7 @@
 				currentWeek: {},
 				nextWeek: {}
 			},
+			weekSliderLoaded: false,
 			created: function () {
 				this.prevWeek = {};
 				this.currentWeek = {};
@@ -49,6 +59,30 @@
 					this.prevWeek.number = selectedWeek - 1;
 					this.currentWeek.number = selectedWeek;
 					this.nextWeek.number = selectedWeek + 1;
+				}
+			},
+			importSlider: function (e) {
+				if (!this.shadowRoot.querySelector('cl-week-slider')) {
+					var link = document.createElement('link');
+					link.rel = 'import';
+					link.href = '/bower_components/cl-week-slider/cl-week-slider.html'
+					link.onload = onload.bind(this);
+					link.onerror = function (e) {};
+					document.head.appendChild(link);
+					this.weekSliderLoaded = true;
+				}
+
+				function onload(e) {
+					var row = document.createElement('div');
+					row.classList.add('row');
+
+					var clWeekSlider = document.createElement('cl-week-slider');
+					clWeekSlider.setAttribute('numWeeks', this.numWeeks);
+					clWeekSlider.setAttribute('selectedWeek', this.selectedWeek);
+					clWeekSlider.setAttribute('progressWeek', this.progressWeek);
+
+					row.appendChild(clWeekSlider);
+					this.shadowRoot.insertBefore(row, this.shadowRoot.children[0]);
 				}
 			}
 		});
