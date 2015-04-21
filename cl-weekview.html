@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/core-signals/core-signals.html">
-<!-- <link rel="import" href="/bower_components/cl-week-slider/cl-week-slider.html"> -->
 <link rel="import" href="/bower_components/cl-week/cl-week.html">
 
 <polymer-element name="cl-weekview">
@@ -9,7 +8,7 @@
 		<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
 		<link rel="stylesheet" href="cl-weekview.css">
 		<style>
-			button {
+			button, .cont {
 				margin-left: 600px;
 			}
 		</style>
@@ -19,14 +18,6 @@
 		<div class="row" hidden?="{{weekSliderLoaded}}">
 			<button on-click="{{importSlider}}">Slider</button>
 		</div>
-
-<!-- 		<div class="row">
-			<cl-week-slider
-				numWeeks="{{numWeeks}}"
-				selectedWeek="{{selectedWeek}}"
-				progressWeek="{{progressWeek}}">
-			</cl-week-slider>
-		</div> -->
 		
 		<cl-week class="prev-week col-xs-2" week='{{prevWeek}}'></cl-week>
 		<cl-week class="current-week col-xs-6" week='{{currentWeek}}'></cl-week>
@@ -44,6 +35,7 @@
 				nextWeek: {}
 			},
 			weekSliderLoaded: false,
+			dependencies: ['bitter-lox', 'sour-halibut'],
 			created: function () {
 				this.prevWeek = {};
 				this.currentWeek = {};
@@ -54,6 +46,27 @@
 				var weekSelectedEvent = 'core-signal-cl-week-slider:week-selected';
 				coreSignals.addEventListener(weekSelectedEvent, weekSelected.bind(this));
 
+				this.dependencies.forEach(function (component) {
+					var url = ['/bower_components', component, component + '.html'].join('/');
+					importHtml(url, onload.bind(component, this), onerror);
+				}, this);
+
+				function onload(clWeekview, e) {
+					angular.element(document).ready((function () {
+						var container = document.createElement('div');
+						var component = document.createElement(this);
+						container.setAttribute('id', this);
+						container.classList.add('cont');
+
+						container.appendChild(component);
+						clWeekview.shadowRoot.insertBefore(container, clWeekview.shadowRoot.children[0]);
+
+						angular.bootstrap(container, [dashToCamel(this)]);
+					}).bind(this));
+				}
+
+				function onerror(e) {}
+
 				function weekSelected(e) {
 					var selectedWeek = e.detail.selectedWeek;
 					this.prevWeek.number = selectedWeek - 1;
@@ -63,13 +76,8 @@
 			},
 			importSlider: function (e) {
 				if (!this.shadowRoot.querySelector('cl-week-slider')) {
-					var link = document.createElement('link');
-					link.rel = 'import';
-					link.href = '/bower_components/cl-week-slider/cl-week-slider.html'
-					link.onload = onload.bind(this);
-					link.onerror = function (e) {};
-					document.head.appendChild(link);
-					this.weekSliderLoaded = true;
+					var sliderUrl = '/bower_components/cl-week-slider/cl-week-slider.html';
+					importHtml(sliderUrl, onload.bind(this), onerror);
 				}
 
 				function onload(e) {
@@ -84,8 +92,23 @@
 					row.appendChild(clWeekSlider);
 					this.shadowRoot.insertBefore(row, this.shadowRoot.children[0]);
 				}
+
+				function onerror(e) {}
 			}
 		});
+
+		function importHtml(url, onload, onerror) {
+			var link = document.createElement('link');
+			link.rel = 'import';
+			link.href = url;
+			link.onload = onload;
+			link.onerror = onerror;
+			document.head.appendChild(link);
+		}
+
+		function dashToCamel(dash) {
+			return dash.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+		}
 	</script>
 
 </polyer-element>
